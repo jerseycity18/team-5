@@ -10,7 +10,7 @@
 	
 	 <title>Best Buddies Citizens Buddy Application</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="css/styles.css">
 	<script src="js/form.js"></script>
 	</head>
 	<body>
@@ -21,11 +21,11 @@
 			<h2>Chapter Location</h2>
 			<label for=""><select name="" id=""></select></label>
 		</div>
-		<div class='form-group'>
+		<div class='form-group tab'>
 			<h2>Buddy Information</h2>
 			<p><label for="">Title</label>
 			<select name="" id=""></select></p>
-			<p><label for="">First Name:</label><input type="text"></p>
+			<p><label for="">First Name:</label><input type="text" oninput="this.className = ''"></p>
 			<p><label for="">Middle:</label><input type="text"></p>
 			<p><label for="">Last</label><input type="text"></p>
 			<p><label for="">Suffix:</label><input type="text"></p>
@@ -55,13 +55,7 @@
 			<p><label for="">Country</label><select name="" id=""><option value=""></option>
 			<option value="">United States</option>
 			<option value="">Canda</option>
-			<option value=""></option>
-			<option value=""></option>
-			<option value=""></option>
-			<option value=""></option>
-			<option value=""></option>
-			<option value=""></option>
-			<option value=""></option></select></p>
+			</select></p>
 			<p><label for="">email:</label><input type="email" name="" id=""></p>
 			<p><label for="">Primary phone:</label><input type="text"></p>
 			<p><label for="">Secondary phone:</label><input type="text"></p>
@@ -129,7 +123,7 @@
 			<p><label for="">insurance</label> <input type="checkbox" name="" id=""></p>
 		</div>
 		<div class='form-group tab'>
-			<button type='button'>Previous</button>
+			<button type='button' id="prevBtn">Previous</button>
 			<button type='button'>Next</button>
 		</div>
 	</form>
