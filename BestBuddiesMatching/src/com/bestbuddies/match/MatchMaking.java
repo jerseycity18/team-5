@@ -28,7 +28,7 @@ public class MatchMaking {
 	public static void matchAlgo(List<Buddy> buddyList, List<Buddy> volunteerList) throws Exception{
 		int n = buddyList.size();
 		int m = volunteerList.size();
-		Map<Buddy, List<Buddy>> listOfMatches = new HashMap<Buddy, List<Buddy>>();
+		//Map<Buddy, List<Buddy>> listOfMatches = new HashMap<Buddy, List<Buddy>>();
 		for(int i=0;i<m;i++){
 			ArrayList<Buddy> orderedBuddyList = new ArrayList<Buddy>(); 
 			for(int j=0;j<n;j++){
@@ -39,17 +39,40 @@ public class MatchMaking {
 				orderedBuddyList.add(buddy);
 			}
 			Collections.sort(orderedBuddyList);
-			//listOfMatches.put(volunteerList.get(i), orderedBuddyList);
 			for(Buddy b: orderedBuddyList){
 				volunteerList.get(i).addSuggestedBuddy(b);
 			}
 			
 		}
-		buddyList = sortByAge(volunteerList);
-		buddyList = getInterestMatches(volunteerList);
+		volunteerList = scoreAge(volunteerList);
+		volunteerList = getInterestMatches(volunteerList);
+		volunteerList = calculateRank(volunteerList);
+		volunteerList = showBuddieswithlowestScore(volunteerList);
+		
+		System.out.println(volunteerList);
 	}
 	
-	static List<Buddy> sortByAge(List<Buddy> listOfMatches){
+	static List<Buddy> showBuddieswithlowestScore(List<Buddy> volunteerList){
+		for(Buddy b: volunteerList){
+			List<Buddy> sortedBuddyList = b.getBuddySuggestedList();
+			b.clearBuddySuggestedList();
+			//public static Comparator<Buddy>
+			Collections.sort(sortedBuddyList, new Comparator<Buddy>() {
+			    @Override
+			    public int compare(Buddy o1, Buddy o2) {
+			    	double d1 = o1.getTotalRank();
+			    	double d2 = o2.getTotalRank();
+			        return Double.compare(d1, d2);
+			    }
+			});
+			for(Buddy bx: sortedBuddyList){
+				b.addSuggestedBuddy(bx);
+			}
+		}
+			return volunteerList;
+	}
+	
+	static List<Buddy> scoreAge(List<Buddy> listOfMatches){
 		int range120 = 1;
 		int range2140 = 2;
 		int range4160 = 3;
@@ -129,17 +152,17 @@ public class MatchMaking {
 	public static List<Buddy> getInterestMatches(List<Buddy> list) {
 		List<Buddy> matchedList = new ArrayList<Buddy>();
 		
-		ListIterator<Buddy> listIter = (ListIterator<Buddy>) list.iterator();
-		while (listIter.hasNext()) {
-			Buddy buddy = listIter.next();
+		//ListIterator<Buddy> listIter = (ListIterator<Buddy>) list.iterator();
+		for(Buddy buddy: list) {
+			//Buddy buddy = listIter.next();
 			
 			List<Buddy> volunteerList = buddy.getBuddySuggestedList();
 			
 			buddy.clearBuddySuggestedList();
 			
-			ListIterator<Buddy> litr = (ListIterator<Buddy>) volunteerList.iterator();
-			while (litr.hasNext()) {
-				Buddy volunteer = litr.next();
+			//ListIterator<Buddy> litr = (ListIterator<Buddy>) volunteerList.iterator();
+			for(Buddy volunteer: volunteerList){
+				//Buddy volunteer = litr.next();
 				Collection<String> volunteerInterests = new ArrayList<String>(Arrays.asList(volunteer.getInterests()));
 				int v = volunteer.getInterests().length;
 				volunteerInterests.removeAll(new ArrayList<String>(Arrays.asList(buddy.getInterests())));
@@ -150,6 +173,18 @@ public class MatchMaking {
 			matchedList.add(buddy);
 		}
 		return matchedList;
+	}
+	
+	public static List<Buddy> calculateRank(List<Buddy> listWithSocres){
+		for(Buddy b: listWithSocres){
+			double totalRank = 0;
+			totalRank += b.getDistance()*1;
+			totalRank += b.getAgeScore()*2;
+			double interestMatch = (100- (b.getInterestMatcht()/b.getInterests().length *100));
+			totalRank += interestMatch*3;
+			b.setTotalRank(totalRank);
+		}
+		return listWithSocres; 
 	}
 
 }
